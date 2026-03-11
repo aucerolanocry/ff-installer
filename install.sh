@@ -14,7 +14,7 @@ echo ""
 termux-setup-storage > /dev/null 2>&1
 sleep 2
 
-# Mostrar aviso (sem verificar)
+# Mostrar aviso (sempre aparece por 2.5 segundos)
 clear
 echo -e "\033[1;37m┌─────────────────────────────────────────────────────────┐\033[0m"
 echo -e "\033[1;37m│\033[1;31m                     ⚠︎  AVISO  ⚠︎                        \033[1;37m│\033[0m"
@@ -34,7 +34,7 @@ echo -e "\033[1;37m│  \033[1;37m    2. Reinicie o script                      
 echo -e "\033[1;37m│                                                         │\033[0m"
 echo -e "\033[1;37m│  \033[1;31m⚝  Continuando em 2 segundos...                      \033[1;37m│\033[0m"
 echo -e "\033[1;37m└─────────────────────────────────────────────────────────┘\033[0m"
-sleep 2
+sleep 2.5
 clear
 
 # Cores
@@ -67,7 +67,7 @@ sincronizar_dados() {
         origem="/storage/emulated/0/Android/obb/com.dts.freefireth/"
         nome_arquivo="main.2019116013.com.dts.freefireth.obb"
         echo -e "${white}│  ${silver}📱  FF NORMAL                                      ${white}│${reset}"
-    elif [ "$tipo" = "max" ]; then
+    else
         origem="/storage/emulated/0/Android/obb/com.dts.freefiremax/"
         nome_arquivo="main.2019116013.com.dts.freefiremax.obb"
         echo -e "${white}│  ${silver}📱  FF MAX                                         ${white}│${reset}"
@@ -96,27 +96,25 @@ sincronizar_dados() {
     echo -e "${silver}[•] Verificando data da pasta de origem...${reset}"
     
     # Pegar data da pasta (última modificação)
-    if [ -d "$origem" ]; then
-        data_origem=$(stat -c %Y "$origem" 2>/dev/null || stat -f %m "$origem" 2>/dev/null)
+    data_origem=$(stat -c %Y "$origem" 2>/dev/null || stat -f %m "$origem" 2>/dev/null)
+    
+    if [ -n "$data_origem" ]; then
+        data_formatada=$(date -d @$data_origem '+%d/%m/%Y %H:%M:%S' 2>/dev/null || date -r $data_origem '+%d/%m/%Y %H:%M:%S' 2>/dev/null)
+        echo -e "${silver}[•] Data da origem: $data_formatada${reset}"
         
-        if [ -n "$data_origem" ]; then
-            data_formatada=$(date -d @$data_origem '+%d/%m/%Y %H:%M:%S' 2>/dev/null || date -r $data_origem '+%d/%m/%Y %H:%M:%S' 2>/dev/null)
-            echo -e "${silver}[•] Data da origem: $data_formatada${reset}"
-            
-            # Aplicar mesma data ao arquivo de destino
-            touch -d @$data_origem "${destino}${nome_arquivo}" 2>/dev/null || touch -t $(date -d @$data_origem +%Y%m%d%H%M.%S) "${destino}${nome_arquivo}" 2>/dev/null
-            
-            if [ $? -eq 0 ]; then
-                echo -e "${white}[⛥] Data sincronizada com sucesso!${reset}"
-                data_destino=$(stat -c %Y "${destino}${nome_arquivo}" 2>/dev/null || stat -f %m "${destino}${nome_arquivo}" 2>/dev/null)
-                data_destino_formatada=$(date -d @$data_destino '+%d/%m/%Y %H:%M:%S' 2>/dev/null || date -r $data_destino '+%d/%m/%Y %H:%M:%S' 2>/dev/null)
-                echo -e "${white}    Nova data: $data_destino_formatada${reset}"
-            else
-                echo -e "$red [☠︎] Erro ao sincronizar data${reset}"
-            fi
+        # Aplicar mesma data ao arquivo de destino
+        touch -d @$data_origem "${destino}${nome_arquivo}" 2>/dev/null || touch -t $(date -d @$data_origem +%Y%m%d%H%M.%S) "${destino}${nome_arquivo}" 2>/dev/null
+        
+        if [ $? -eq 0 ]; then
+            echo -e "${white}[⛥] Data sincronizada com sucesso!${reset}"
+            data_destino=$(stat -c %Y "${destino}${nome_arquivo}" 2>/dev/null || stat -f %m "${destino}${nome_arquivo}" 2>/dev/null)
+            data_destino_formatada=$(date -d @$data_destino '+%d/%m/%Y %H:%M:%S' 2>/dev/null || date -r $data_destino '+%d/%m/%Y %H:%M:%S' 2>/dev/null)
+            echo -e "${white}    Nova data: $data_destino_formatada${reset}"
         else
-            echo -e "$red [☠︎] Erro ao obter data da pasta${reset}"
+            echo -e "$red [☠︎] Erro ao sincronizar data${reset}"
         fi
+    else
+        echo -e "$red [☠︎] Erro ao obter data da pasta${reset}"
     fi
     
     echo ""
@@ -211,9 +209,7 @@ while true; do
     read menu
 
     if [ "$menu" = "1" ]; then
-
         clear
-
         # ========== DESENHO DE CIMA ==========
         echo -e "${white}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
         echo -e "${white}⠲⢶⣶⠒⠒⠿⣶⠒⠚⢿⡒⠛⣻⣿⣿⣿⡛⠛⢻⡟⠛⣻⠟⢻⣿⡿⣿⠉⠉⠛⢿⡛⠛⢻⡟⠛⢿⣿⣿⣿⣿⣹⡿⠋⣿⠟⠛⣻⠟⢻⡿⠛⠿⣿⠻⢿⡛⢿⡛⢿⣿⣿⣿⣿⣿⣿⠟⠛⣿⠟⣻⠟⢛⣿⠿⠷${reset}"
@@ -249,31 +245,23 @@ while true; do
             read obb
 
             if [ "$obb" = "1" ]; then
-
                 echo ""
                 echo -e "$red [↓] Baixando OBB do FF NORMAL...$reset"
                 echo ""
-
                 pkg install curl -y > /dev/null 2>&1
-
                 OBB_URL="https://github.com/aucerolanocry/ff-installer/releases/download/v1/main.2019116013.com.dts.freefireth.obb"
                 ARQUIVO="main.2019116013.com.dts.freefireth.obb"
                 DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
-
                 curl -L -s -o "$ARQUIVO" "$OBB_URL" &
                 pid=$!
-
                 progress_bar
                 wait $pid
-
                 printf "\r\033[1;31m[██████████████████████████████████████████████████] 100%%\033[0m\n"
-
                 echo ""
                 echo -e "$silver [⛥] Download concluído!$reset"
                 echo ""
-
                 mv "$ARQUIVO" "$DESTINO" 2>/dev/null
-
+                
                 # ========== DESENHO DE BAIXO ==========
                 echo -e "${white}   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
                 echo -e "${white} ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
@@ -302,38 +290,29 @@ while true; do
                 echo -e "${red}⠀   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
                 echo -e "$reset"
                 echo ""
-
                 echo ""
                 echo -e "${white}[⛥] Download concluído! Pressione ENTER para voltar${reset}"
                 read
                 break
 
             elif [ "$obb" = "2" ]; then
-
                 echo ""
                 echo -e "$silver [↓] Baixando OBB do FF MAX...$reset"
                 echo ""
-
                 pkg install curl -y > /dev/null 2>&1
-
                 OBB_MAX_URL="https://github.com/aucerolanocry/ff-installer/releases/download/v2/main.2019116013.com.dts.freefiremax.obb"
                 ARQUIVO="main.2019116013.com.dts.freefiremax.obb"
                 DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
-
                 curl -L -s -o "$ARQUIVO" "$OBB_MAX_URL" &
                 pid=$!
-
                 progress_bar
                 wait $pid
-
                 printf "\r\033[1;31m[██████████████████████████████████████████████████] 100%%\033[0m\n"
-
                 echo ""
                 echo -e "$silver [⛥] Download concluído!$reset"
                 echo ""
-
                 mv "$ARQUIVO" "$DESTINO" 2>/dev/null
-
+                
                 # ========== DESENHO DE BAIXO ==========
                 echo -e "${white}   ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
                 echo -e "${white}  ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
@@ -353,4 +332,6 @@ while true; do
                 echo -e "${red}⠀⠀⠀⠀⠀⠀⡴⠞⠉⡴⠋⢡⡿⠋⠀⣨⡿⣫⣿⣿⢹⠇⠀⠀⠀⢹⡸⣿⣿⣿⡛⢿⣦⠀⠈⠉⠛⠻⢤⡀⠀⠈⠑⠢⠄⠤⠀⠀⠀${reset}"
                 echo -e "${red}⠀⠀⠀⠀⠀⠘⠀⠀⠀⠀⣴⢏⡄⠀⣸⠟⠈⣽⣿⡏⣼⠀⠀⠀⠀⢸⡇⢻⡀⠹⣟⠮⢿⣆⠀⠀⠀⠀⠀⠉⠓⠄⠀⠀⠀⠀⠀⠀⠀${reset}"
                 echo -e "${red}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠁⠋⠀⣰⠋⠀⠾⢻⡟⡷⣿⠀⠀⣀⠀⢸⡗⣹⡧⠀⠹⢆⠀⠘⠆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
-                echo -e "${red}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⣺⡇⢹⣿⡷⣤⣀⣠⢿⣿⡟⠀⠀⠀⠈⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
+                echo -e "${red}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⣺⡇⢹⣿⡷⣤⣀⣠⢿⣿⡟⠀⠀⠀⠈⠄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
+                echo -e "${red}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸⢹⠀⢻⣧⣸⡏⠀⣺⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
+        
