@@ -4,9 +4,11 @@ clear
 
 cyan='\033[1;36m'
 green='\033[1;32m'
+purple='\033[1;35m'
 yellow='\033[1;33m'
-red='\033[1;31m'
 reset='\033[0m'
+
+clear
 
 echo -e "$cyan"
 
@@ -23,11 +25,9 @@ cat << "EOF"
 ⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠉⢉⣽⣿⠿⣿⡿⢻⣯⡍⢁⠄⠀⠀⠀⣸⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⡄⠀⠀⠐⡀⢉⠉⠀⠠⠀⢉⣉⠀⡜⠀⠀⠀⠀⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⠿⠁⠀⠀⠀⠘⣤⣭⣟⠛⠛⣉⣁⡜⠀⠀⠀⠀⠀⠛⠿⣿⣿⣿
-⡿⠟⠛⠉⠉⠀⠀⠀⠀⠀⠀⠀⠈⢻⣿⡀⠀⣿⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉
-⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠁⠀⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 
         AUCEROLA NOCRY
-           EQP NOCRY
+          EQP NOCRY
 
 EOF
 
@@ -41,7 +41,7 @@ echo "2 - ANT SCANNER"
 echo "3 - SAIR"
 echo "━━━━━━━━━━━━━━━━━━━━━━"
 
-read -p "Escolha uma opção: " menu
+read -p "Escolha: " menu
 
 if [ "$menu" = "1" ]; then
 
@@ -61,53 +61,72 @@ if [ "$obb" = "1" ]; then
 echo ""
 echo -e "$green Iniciando instalação...$reset"
 
-pkg install curl -y > /dev/null
+pkg install curl -y > /dev/null 2>&1
 
 OBB_URL="https://github.com/aucerolanocry/ff-installer/releases/download/v1/main.2019116013.com.dts.freefireth.obb"
 
-DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec"
+ARQUIVO="main.2019116013.com.dts.freefireth.obb"
 
-mkdir -p "$DESTINO"
+curl -L -s -o "$ARQUIVO" "$OBB_URL" &
+
+pid=$!
+
+progress_bar() {
+
+progress=0
+
+while kill -0 $pid 2>/dev/null; do
+
+progress=$((progress+1))
+
+if [ $progress -gt 100 ]; then
+progress=100
+fi
+
+filled=$((progress/2))
+empty=$((50-filled))
+
+if ((progress % 3 == 0)); then
+color="\033[1;32m"
+elif ((progress % 3 == 1)); then
+color="\033[1;36m"
+else
+color="\033[1;35m"
+fi
+
+printf "\r${color}["
+printf "%0.s█" $(seq 1 $filled)
+printf "%0.s░" $(seq 1 $empty)
+printf "] %3d%%\033[0m" "$progress"
+
+sleep 0.1
+
+done
+
+}
+
+progress_bar
+wait $pid
+
+printf "\r\033[1;32m[██████████████████████████████████████████████████] 100%%\033[0m\n"
 
 echo ""
-echo "Baixando OBB (258MB)..."
-curl -L -o main.2019116013.com.dts.freefireth.obb "$OBB_URL"
-
-echo ""
-echo "Movendo arquivo..."
-mv main.2019116013.com.dts.freefireth.obb "$DESTINO/"
-
-echo ""
-echo -e "$green ✔ OBB instalada com sucesso!"
-echo "Local:"
-echo "$DESTINO"
+echo -e "$green ✔ Instalação concluída!$reset"
 
 elif [ "$obb" = "2" ]; then
 
 echo ""
-echo -e "$yellow FREE FIRE MAX$reset"
-echo ""
-echo "Status: INDISPONÍVEL"
-echo "Atualização em andamento..."
-echo "Equipe Nocry está preparando suporte."
+echo -e "$yellow Free Fire Max em desenvolvimento...$reset"
 
 fi
 
 elif [ "$menu" = "2" ]; then
 
 echo ""
-echo -e "$yellow ANT SCANNER$reset"
-echo ""
-echo "Função em desenvolvimento."
-echo "Atualização em breve."
+echo -e "$purple ANT SCANNER EM BREVE$reset"
 
 elif [ "$menu" = "3" ]; then
 
-echo "Saindo..."
 exit
-
-else
-
-echo -e "$red Opção inválida.$reset"
 
 fi
