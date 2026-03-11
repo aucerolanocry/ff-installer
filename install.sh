@@ -16,31 +16,37 @@ reset='\033[0m'
 # FUNÇÃO PARA VOLTAR AO MENU
 voltar_menu() {
     echo ""
-    echo -e "${red}──────────────────────────────${reset}"  # VERMELHO
+    echo -e "${red}⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘${reset}"
     read -p "$(echo -e "${white}[•] Pressione ENTER para voltar ao menu principal${reset}")"
     clear
     exec "$0"
     exit
 }
 
-# ===== BARRA DE PROGRESSO PISCANTE (CINZA, BRANCO, VERMELHO) =====
+# ===== BARRA DE PROGRESSO ORIGINAL (VERDE, CIANO, ROXO) =====
 progress_bar() {
-    local -a cores=($silver $white $red)
-    local cor_index=0
-    
-    while read -r line; do
-        if [[ $line =~ [0-9]+% ]]; then
-            percent=${BASH_REMATCH[0]%\%}
-            
-            cor_index=$(( (cor_index + 1) % 3 ))
-            color=${cores[$cor_index]}
-            
-            barra=""
-            for ((i=0; i<percent/2; i++)); do barra+="█"; done
-            for ((i=0; i<50-percent/2; i++)); do barra+="░"; done
-            
-            printf "\r${color}[%s] %3d%%${reset}" "$barra" "$percent"
+    progress=0
+    while kill -0 $pid 2>/dev/null; do
+        progress=$((progress+1))
+        if [ $progress -gt 100 ]; then
+            progress=100
         fi
+        filled=$((progress/2))
+        empty=$((50-filled))
+        
+        if ((progress % 3 == 0)); then
+            color="\033[1;32m"  # Verde
+        elif ((progress % 3 == 1)); then
+            color="\033[1;36m"  # Ciano
+        else
+            color="\033[1;35m"  # Roxo
+        fi
+        
+        printf "\r${color}["
+        printf "%0.s█" $(seq 1 $filled)
+        printf "%0.s░" $(seq 1 $empty)
+        printf "] %3d%%\033[0m" "$progress"
+        sleep 0.1
     done
 }
 
@@ -57,14 +63,14 @@ echo -e "${white}└────────────────────
 # PAUSA DE 1 SEGUNDO
 sleep 1
 
-# ========== CRÉDITOS ==========
-echo -e "${white}│  ${red}⚡${white} SISTEMA DE BYPASS ${red}⚡${silver} // ${silver}DEVELOPED BY AUCEROLA NOCRY${silver} // ${red}EQP NOCRY${red} ⚡${white}  │${reset}"
+# ========== CRÉDITOS COM NOVOS SÍMBOLOS ==========
+echo -e "${white}│  ${red}𓆩♱𓆪${white} SISTEMA DE BYPASS ${red}𓅃${silver} // ${silver}DEVELOPED BY AUCEROLA NOCRY${silver} // ${red}EQP NOCRY${red} ${red}𓆩♱𓆪${white}  │${reset}"
 echo ""
 
 # PAUSA DE 2 SEGUNDOS
 sleep 2
 
-# ========== DESENHO DO HACKER COM GRADIENTE BRANCO → PRATA → VERMELHO ==========
+# ========== DESENHO DO HACKER ==========
 echo -e "${white}⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⠁⠀⠀⠀⠀⠉⠉⠉⠛⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿${reset}"
 echo -e "${white}⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿${reset}"
 echo -e "${white}⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿${reset}"
@@ -107,7 +113,8 @@ echo -e "${white}│  ${red}[3] SAIR                                          ${
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
-echo -e -n "${white}┌─[${red}NOCRY${white}@${cyan}TERMUX${white}]${reset}\n${white}└──╼ ${yellow}"
+# PROMPT PRINCIPAL
+echo -e -n "${white}NOCRY${silver} | ${red}TERMUX${reset}\n${white}└──╼ ${yellow}"
 read menu
 
 if [ "$menu" = "1" ]; then
@@ -124,7 +131,7 @@ echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${w
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
-echo -e -n "${white}┌─[NOCRY | OBBS]${reset}\n${red}└──╼ "
+echo -e -n "${white}NOCRY${silver} | ${red}OBBS${reset}\n${red}└──╼ "
 read obb
 
 if [ "$obb" = "1" ]; then
@@ -140,12 +147,17 @@ OBB_URL="https://github.com/aucerolanocry/ff-installer/releases/download/v1/main
 ARQUIVO="main.2019116013.com.dts.freefireth.obb"
 DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
 
-# Download com barra PISCANTE (cinza, branco, vermelho)
-curl -L -o "$ARQUIVO" "$OBB_URL" --progress-bar 2>&1 | progress_bar
+# Download com barra ORIGINAL
+curl -L -s -o "$ARQUIVO" "$OBB_URL" &
+pid=$!
+
+progress_bar
+wait $pid
+
+printf "\r\033[1;32m[██████████████████████████████████████████████████] 100%%\033[0m\n"
 
 echo ""
-echo ""
-echo -e "$silver [✓] Download concluído!$reset"  # CINZA
+echo -e "$silver [✓] Download concluído!$reset"
 echo ""
 
 # Move o arquivo silenciosamente
@@ -182,12 +194,12 @@ clear
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${silver}                   ANT SCANNER                       ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${white}│  ${silver}⚡  EM BREVE                                       ${white}│${reset}"
+echo -e "${white}│  ${silver}𓅃  EM BREVE                                       ${white}│${reset}"
 echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
-echo -e -n "${silver}┌─[NOCRY | SCANNER]${reset}\n${red}└──╼ "
+echo -e -n "${white}NOCRY${silver} | ${red}SCANNER${reset}\n${red}└──╼ "
 read scanner
 
 if [ "$scanner" = "0" ]; then
