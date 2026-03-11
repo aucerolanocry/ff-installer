@@ -147,9 +147,9 @@ sleep 2
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${silver}                   INSTALAR OBBS                      ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${white}│  ${silver}[1] FREE FIRE NORMAL                              ${white}│${reset}"
-echo -e "${white}│  ${silver}[2] FREE FIRE MAX                                ${white}│${reset}"
-echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
+echo -e "${white}│  ${white}[1] FREE FIRE NORMAL                              ${white}│${reset}"  # BRANCO
+echo -e "${white}│  ${silver}[2] FREE FIRE MAX                                ${white}│${reset}"  # CINZA
+echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"  # VERMELHO
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
