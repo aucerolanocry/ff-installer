@@ -65,13 +65,13 @@ echo -e "${white}└────────────────────
 sleep 1
 
 # ========== CRÉDITOS ==========
-echo -e "${white}│  ${red}𓆩♱𓆪${white} SISTEMA DE BYPASS ${red}ᡕᠵデᡁ᠊╾━${silver} // ${silver}DEVELOPED BY AUCEROLA NOCRY${silver} // ${red}EQP NOCRY${red} ${red}𓆩♱𓆪${white}  │${reset}"
+echo -e "${white}│  ${red}𓆩♱𓆪${white} SISTEMA DE BYPASS ${red}𓅃${silver} // ${silver}DEVELOPED BY AUCEROLA NOCRY${silver} // ${red}EQP NOCRY${red} ${red}𓆩♱𓆪${white}  │${reset}"
 echo ""
 
 # PAUSA DE 2 SEGUNDOS
 sleep 2
 
-# ========== DESENHO DO HACKER ==========
+# ========== DESENHO DO HACKER PRINCIPAL ==========
 echo -e "${white}⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⠁⠀⠀⠀⠀⠉⠉⠉⠛⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿${reset}"
 echo -e "${white}⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿${reset}"
 echo -e "${white}⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿${reset}"
@@ -108,31 +108,57 @@ sleep 2
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${white}                     MENU PRINCIPAL                    ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${white}│  ${silver}[1] INSTALAR OBBS                               ${white}│${reset}"  # CINZA
-echo -e "${white}│  ${silver}[2] ANT SCANNER                                 ${white}│${reset}"  # CINZA
-echo -e "${white}│  ${red}[3] SAIR                                          ${white}│${reset}"  # VERMELHO
+echo -e "${white}│  ${silver}[1] INSTALAR OBBS                               ${white}│${reset}"
+echo -e "${white}│  ${silver}[2] ANT SCANNER                                 ${white}│${reset}"
+echo -e "${white}│  ${silver}[3] SAIR                                        ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
-# PROMPT PRINCIPAL
-echo -e -n "${white}NOCRY${silver} | ${red}TERMUX${reset}\n${white}└──╼ ${yellow}"
+# PROMPT PRINCIPAL COM INPUT EM CINZA
+echo -e -n "${white}NOCRY${silver} | ${red}TERMUX${reset}\n${white}└──╼ ${silver}"
 read menu
 
 if [ "$menu" = "1" ]; then
 
 clear
 
+# ========== NOVO DESENHO PARA OBBS ==========
+echo -e "${red}"
+cat << "EOF"
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸
+⠲⢶⣶⠒⠒⠿⣶⠒⠚⢿⡒⠛⣻⣿⣿⣿⡛⠛⢻⡟⠛⣻⠟⢻⣿⡿⣿⠉⠉⠛⢿⡛⠛⢻⡟⠛⢿⣿⣿⣿⣿⣹⡿⠋⣿⠟⠛⣻⠟⢻⡿⠛⠿⣿⠻⢿⡛⢿⡛⢿⣿⣿⣿⣿⣿⣿⠟⠛⣿⠟⣻⠟⢛⣿⠿⠷⢸
+⠀⠀⠹⣧⠀⠀⢹⡆⠀⢸⣧⡾⣻⣿⣧⠀⠙⣳⣾⡀⢰⠏⢠⡿⢸⠀⠘⢷⡀⠀⠀⢿⡀⠀⢻⣴⠟⣿⣽⣽⣿⠟⢷⣤⡇⠀⢠⡏⢠⡟⠀⠀⠀⠈⣇⠈⣧⢈⣷⣟⢻⣾⣹⣿⣼⠿⣦⣼⠃⣰⠏⢀⡾⠁⠀⠀⢸
+⠀⠀⠀⠘⣧⠀⠀⣿⢠⡾⠛⣷⣏⣿⠹⣤⡾⠉⣩⡿⠿⣦⣿⠁⢸⠀⠀⠈⣧⠀⠀⢸⣧⡶⠛⢿⣼⠁⢹⠁⠈⣷⣠⡟⠛⢶⣼⡇⣾⠀⠀⠀⠀⠀⢸⣠⡿⢿⣄⢻⣾⡋⢻⠏⢿⣴⠟⢻⣶⡏⠀⡼⠁⠀⠀⠀⢸
+⠀⠀⠀⠀⢸⡄⢀⡿⠛⠳⣦⡟⠙⣿⠖⣿⠀⡼⠋⠀⣠⡾⠛⠓⢸⠀⠀⠀⢸⣆⣠⡾⠻⣦⡀⣸⠟⠳⣾⡶⠛⠙⢻⡄⢀⡿⠉⣻⣿⡄⠀⠀⠀⠀⠞⠛⢷⣄⢹⣶⡟⠛⢿⡾⠛⢿⣠⡟⠉⢻⣶⡇⠀⠀⠀⠀⢸
+⠀⠀⠀⠀⣸⡿⠛⢶⣄⠀⣿⠷⢦⣿⣤⢾⣿⠃⠀⣼⠏⠀⠀⠀⢸⠀⠀⠀⣠⠿⣧⣀⠀⠈⢿⡏⠀⠀⢻⠀⠀⣀⣀⣿⣼⢃⡾⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣆⣿⠛⠳⣾⣀⣤⠾⢿⣀⣴⠟⠉⠛⠀⠀⠀⠀⢸
+⠀⠀⠀⠘⠃⠀⠀⠀⢹⣾⠇⠀⠀⣿⠁⠀⢻⣄⣾⠃⠀⠀⠀⠀⢸⠀⠀⠈⠁⠀⠀⠻⣦⢀⡾⠻⠶⣤⣸⣴⠞⠋⠁⠈⢻⣿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣻⠷⢶⣄⣸⠏⣠⣴⠾⣿⠁⠀⠀⠀⠀⠀⠀⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⢠⡿⠟⠛⠻⣿⣴⠾⠿⣿⠃⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠘⣿⣃⣀⠀⠈⢹⠃⢀⣤⠾⠛⠛⠛⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠋⠀⠀⠙⢾⡻⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⡾⠀⠀⠀⠀⣿⠀⠀⠀⠘⠂⠀⠀⠀⢸⠀⢸⠀⡇⠀⠀⠀⠀⠀⠰⠏⠀⠉⠙⢷⣼⣶⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠉⠀⠀⠀⠀⠀⠀⡀⠀⢸⡀⢸⠀⡇⠀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠱⡤⠤⢽⣿⡿⢥⣜⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡔⠑⡯⠻⢻⠑⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇⠀⣼⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠳⠀⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸
+EOF
+echo -e "$reset"
+echo ""
+
+# PAUSA DE 2 SEGUNDOS
+sleep 2
+
 # ========== SUBMENU INSTALAR OBBS ==========
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${silver}                   INSTALAR OBBS                      ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${white}│  ${white}[1] FREE FIRE NORMAL                              ${white}│${reset}"
+echo -e "${white}│  ${silver}[1] FREE FIRE NORMAL                              ${white}│${reset}"
 echo -e "${white}│  ${silver}[2] FREE FIRE MAX                                ${white}│${reset}"
 echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
-echo -e -n "${white}NOCRY${silver} | ${red}OBBS${reset}\n${red}└──╼ "
+# PROMPT OBBS COM INPUT EM CINZA
+echo -e -n "${white}NOCRY${silver} | ${red}OBBS${reset}\n${red}└──╼ ${silver}"
 read obb
 
 if [ "$obb" = "1" ]; then
@@ -195,12 +221,13 @@ clear
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${silver}                   ANT SCANNER                       ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${white}│  ${silver}ᡕᠵデᡁ᠊╾━  EM BREVE                               ${white}│${reset}"
+echo -e "${white}│  ${silver}𓅃  EM BREVE                                      ${white}│${reset}"
 echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
-echo -e -n "${white}NOCRY${silver} | ${red}SCANNER${reset}\n${red}└──╼ "
+# PROMPT SCANNER COM INPUT EM CINZA
+echo -e -n "${white}NOCRY${silver} | ${red}SCANNER${reset}\n${red}└──╼ ${silver}"
 read scanner
 
 if [ "$scanner" = "0" ]; then
