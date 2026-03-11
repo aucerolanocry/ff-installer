@@ -7,6 +7,7 @@ green='\033[1;32m'
 purple='\033[1;35m'
 yellow='\033[1;33m'
 red='\033[1;31m'
+red_dark='\033[0;31m'
 cyan='\033[1;36m'
 blue='\033[1;34m'
 silver='\033[0;37m'   # PRATA (cinza médio)
@@ -18,12 +19,13 @@ voltar_menu() {
     echo ""
     echo -e "${red}⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘${reset}"
     read -p "$(echo -e "${white}[•] Pressione ENTER para voltar ao menu principal${reset}")"
+    echo -e "${red}⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘⫘${reset}"
     clear
     exec "$0"
     exit
 }
 
-# ===== BARRA DE PROGRESSO ORIGINAL (VERDE, CIANO, ROXO) =====
+# ===== BARRA DE PROGRESSO VERMELHA PISCANTE =====
 progress_bar() {
     progress=0
     while kill -0 $pid 2>/dev/null; do
@@ -34,12 +36,11 @@ progress_bar() {
         filled=$((progress/2))
         empty=$((50-filled))
         
-        if ((progress % 3 == 0)); then
-            color="\033[1;32m"  # Verde
-        elif ((progress % 3 == 1)); then
-            color="\033[1;36m"  # Ciano
+        # Efeito piscante: alterna entre vermelho brilhante e escuro
+        if ((progress % 2 == 0)); then
+            color="\033[1;31m"  # Vermelho brilhante
         else
-            color="\033[1;35m"  # Roxo
+            color="\033[0;31m"  # Vermelho escuro
         fi
         
         printf "\r${color}["
@@ -63,8 +64,8 @@ echo -e "${white}└────────────────────
 # PAUSA DE 1 SEGUNDO
 sleep 1
 
-# ========== CRÉDITOS COM NOVOS SÍMBOLOS ==========
-echo -e "${white}│  ${red}𓆩♱𓆪${white} SISTEMA DE BYPASS ${red}𓅃${silver} // ${silver}DEVELOPED BY AUCEROLA NOCRY${silver} // ${red}EQP NOCRY${red} ${red}𓆩♱𓆪${white}  │${reset}"
+# ========== CRÉDITOS ==========
+echo -e "${white}│  ${red}𓆩♱𓆪${white} SISTEMA DE BYPASS ${red}ᡕᠵデᡁ᠊╾━${silver} // ${silver}DEVELOPED BY AUCEROLA NOCRY${silver} // ${red}EQP NOCRY${red} ${red}𓆩♱𓆪${white}  │${reset}"
 echo ""
 
 # PAUSA DE 2 SEGUNDOS
@@ -107,9 +108,9 @@ sleep 2
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${white}                     MENU PRINCIPAL                    ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${white}│  ${silver}[1] INSTALAR OBBS                               ${white}│${reset}"
-echo -e "${white}│  ${silver}[2] ANT SCANNER                                 ${white}│${reset}"
-echo -e "${white}│  ${red}[3] SAIR                                          ${white}│${reset}"
+echo -e "${white}│  ${silver}[1] INSTALAR OBBS                               ${white}│${reset}"  # CINZA
+echo -e "${white}│  ${silver}[2] ANT SCANNER                                 ${white}│${reset}"  # CINZA
+echo -e "${white}│  ${red}[3] SAIR                                          ${white}│${reset}"  # VERMELHO
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
@@ -147,14 +148,14 @@ OBB_URL="https://github.com/aucerolanocry/ff-installer/releases/download/v1/main
 ARQUIVO="main.2019116013.com.dts.freefireth.obb"
 DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
 
-# Download com barra ORIGINAL
+# Download com barra VERMELHA PISCANTE
 curl -L -s -o "$ARQUIVO" "$OBB_URL" &
 pid=$!
 
 progress_bar
 wait $pid
 
-printf "\r\033[1;32m[██████████████████████████████████████████████████] 100%%\033[0m\n"
+printf "\r\033[1;31m[██████████████████████████████████████████████████] 100%%\033[0m\n"
 
 echo ""
 echo -e "$silver [✓] Download concluído!$reset"
@@ -194,7 +195,7 @@ clear
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${silver}                   ANT SCANNER                       ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${white}│  ${silver}𓅃  EM BREVE                                       ${white}│${reset}"
+echo -e "${white}│  ${silver}ᡕᠵデᡁ᠊╾━  EM BREVE                               ${white}│${reset}"
 echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
