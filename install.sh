@@ -9,20 +9,52 @@ yellow='\033[1;33m'
 red='\033[1;31m'
 cyan='\033[1;36m'
 blue='\033[1;34m'
-pink='\033[1;35m'  # Rosa (igual roxo)
+pink='\033[1;35m'  # Rosa
 white='\033[1;37m'
 reset='\033[0m'
 
-# FUNÇÃO PARA VOLTAR AO MENU
+# FUNÇÃO PARA VOLTAR AO MENU (CORRIGIDA)
 voltar_menu() {
     echo ""
     echo -e "${yellow}──────────────────────────────${reset}"
-    read -p "$(echo -e "${pink}[•] Pressione ENTER para voltar ao menu principal${reset}")"
-    bash "$0"
+    read -p "$(echo -e "${green}[•] Pressione ENTER para voltar ao menu principal${reset}")"
+    clear
+    exec bash "$0"
     exit
 }
 
-# TÍTULO PRINCIPAL + CRÉDITOS (aparece primeiro)
+# FUNÇÃO DA BARRA DE PROGRESSO COLORIDA
+progress_bar() {
+    while read -r line; do
+        if [[ $line =~ [0-9]+% ]]; then
+            percent=${BASH_REMATCH[0]%\%}
+            
+            # Escolhe a cor baseada na porcentagem
+            if [ $percent -lt 20 ]; then
+                color=$green
+            elif [ $percent -lt 40 ]; then
+                color=$cyan
+            elif [ $percent -lt 60 ]; then
+                color=$purple
+            elif [ $percent -lt 80 ]; then
+                color=$red
+            else
+                color=$yellow
+            fi
+            
+            # Desenha a barra
+            filled=$((percent/2))
+            empty=$((50-filled))
+            
+            printf "\r${color}["
+            printf "%0.s█" $(seq 1 $filled)
+            printf "%0.s░" $(seq 1 $empty)
+            printf "] %3d%%${reset}" "$percent"
+        fi
+    done
+}
+
+# TÍTULO PRINCIPAL + CRÉDITOS
 echo -e "${green}┌─────────────────────────────────────────────────────────┐${reset}"
 echo -e "${green}│  ${yellow}███╗   ███╗███████╗███╗   ██╗██╗   ██╗    ${cyan}██████╗  ██████╗  ██████╗██████╗ ██╗   ██╗  ${green}│${reset}"
 echo -e "${green}│  ${yellow}████╗ ████║██╔════╝████╗  ██║██║   ██║    ${cyan}██╔══██╗██╔═══██╗██╔════╝██╔══██╗╚██╗ ██╔╝  ${green}│${reset}"
@@ -38,7 +70,7 @@ echo ""
 # PAUSA DE 2 SEGUNDOS
 sleep 2
 
-# DESENHO DO HACKER COMPLETO (aparece inteiro)
+# DESENHO DO HACKER COMPLETO
 echo -e "$green"
 cat << "EOF"
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠟⠋⠁⠀⠀⠀⠀⠉⠉⠉⠛⠛⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
@@ -74,13 +106,13 @@ echo ""
 # PAUSA DE 2 SEGUNDOS
 sleep 2
 
-# MENU PRINCIPAL (com cores personalizadas)
+# MENU PRINCIPAL - TUDO COLORIDO
 echo -e "${cyan}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${cyan}│${green}                     MENU PRINCIPAL                    ${cyan}│${reset}"
 echo -e "${cyan}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${cyan}│${pink}  [1] ROSA • INSTALAR OBBS                           ${cyan}│${reset}"
-echo -e "${cyan}│${blue}  [2] AZUL • ANT SCANNER                             ${cyan}│${reset}"
-echo -e "${cyan}│${red}  [3] VERMELHO • SAIR                                 ${cyan}│${reset}"
+echo -e "${cyan}│  ${pink}[1] INSTALAR OBBS                                 ${cyan}│${reset}"
+echo -e "${cyan}│  ${blue}[2] ANT SCANNER                                   ${cyan}│${reset}"
+echo -e "${cyan}│  ${red}[3] SAIR                                          ${cyan}│${reset}"
 echo -e "${cyan}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
@@ -93,9 +125,9 @@ clear
 echo -e "${cyan}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${cyan}│${pink}                   INSTALAR OBBS                      ${cyan}│${reset}"
 echo -e "${cyan}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${cyan}│${pink}  [1] FREE FIRE NORMAL                               ${cyan}│${reset}"
-echo -e "${cyan}│${pink}  [2] FREE FIRE MAX                                 ${cyan}│${reset}"
-echo -e "${cyan}│${pink}  [0] VOLTAR AO MENU                                 ${cyan}│${reset}"
+echo -e "${cyan}│  ${pink}[1] FREE FIRE NORMAL                              ${cyan}│${reset}"
+echo -e "${cyan}│  ${pink}[2] FREE FIRE MAX                                ${cyan}│${reset}"
+echo -e "${cyan}│  ${yellow}[0] VOLTAR AO MENU                               ${cyan}│${reset}"
 echo -e "${cyan}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
@@ -117,8 +149,8 @@ DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
 echo -e "$cyan [↓] Baixando OBB...$reset"
 echo ""
 
-# Download com barra de progresso
-curl -L -o "$ARQUIVO" "$OBB_URL" --progress-bar
+# Download com barra de progresso COLORIDA
+curl -L -o "$ARQUIVO" "$OBB_URL" --progress-bar 2>&1 | progress_bar
 
 echo ""
 echo ""
@@ -171,8 +203,7 @@ clear
 echo -e "${cyan}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${cyan}│${blue}                   ANT SCANNER                       ${cyan}│${reset}"
 echo -e "${cyan}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${cyan}│${blue}  ⚠️  EM DESENVOLVIMENTO                            ${cyan}│${reset}"
-echo -e "${cyan}│${blue}  [0] VOLTAR AO MENU                                ${cyan}│${reset}"
+echo -e "${cyan}│  ${yellow}[0] VOLTAR AO MENU                               ${cyan}│${reset}"
 echo -e "${cyan}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
