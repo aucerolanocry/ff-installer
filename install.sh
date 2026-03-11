@@ -22,7 +22,7 @@ if [ ! -d "/storage/emulated/0" ]; then
     echo -e "\033[1;37m│\033[1;31m                     ⚠︎  ERRO  ⚠︎                        \033[1;37m│\033[0m"
     echo -e "\033[1;37m├─────────────────────────────────────────────────────────┤\033[0m"
     echo -e "\033[1;37m│                                                         │\033[0m"
-    echo -e "\033[1;37m│  \033[1;31m  ☠︎  PERMISSÃO NEGADA!                                \033[1;37m│\033[0m"
+    echo -e "\033[1;37m│  \033[1;31m☠︎  PERMISSÃO NEGADA!                                 \033[1;37m│\033[0m"
     echo -e "\033[1;37m│                                                         │\033[0m"
     echo -e "\033[1;37m│  \033[0;37mPara usar este script, você precisa permitir       \033[1;37m│\033[0m"
     echo -e "\033[1;37m│  \033[0;37mo acesso do Termux aos arquivos do dispositivo.    \033[1;37m│\033[0m"
@@ -35,8 +35,8 @@ if [ ! -d "/storage/emulated/0" ]; then
     echo -e "\033[1;37m│                                                         │\033[0m"
     echo -e "\033[1;37m└─────────────────────────────────────────────────────────┘\033[0m"
     echo ""
-    echo -e -n "\033[1;37m[•] Pressione ENTER para sair\033[0m"
-    read
+    echo -e "\033[1;31m[☠︎] Script encerrado. Execute novamente após permitir o acesso.\033[0m"
+    sleep 3
     exit 1
 fi
 
@@ -52,10 +52,10 @@ echo -e "\033[1;37m└───────────────────�
 sleep 2
 clear
 
-# Cores (apenas branco, cinza e vermelho)
-white='\033[1;37m'    # BRANCO
-silver='\033[0;37m'   # CINZA
-red='\033[1;31m'      # VERMELHO
+# Cores
+white='\033[1;37m'
+silver='\033[0;37m'
+red='\033[1;31m'
 reset='\033[0m'
 
 # FUNÇÃO PARA VOLTAR AO MENU
@@ -63,6 +63,83 @@ voltar_menu() {
     clear
     exec "$0"
     exit
+}
+
+# ===== FUNÇÃO PARA SINCRONIZAR DADOS =====
+sincronizar_dados() {
+    local tipo=$1
+    local origem=""
+    local destino="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
+    local nome_arquivo=""
+    
+    clear
+    
+    echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
+    echo -e "${white}│${silver}               SINCRONIZANDO DADOS                    ${white}│${reset}"
+    echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
+    
+    if [ "$tipo" = "normal" ]; then
+        origem="/storage/emulated/0/Android/obb/com.dts.freefireth/"
+        nome_arquivo="main.2019116013.com.dts.freefireth.obb"
+        echo -e "${white}│  ${silver}📱  FF NORMAL                                      ${white}│${reset}"
+    elif [ "$tipo" = "max" ]; then
+        origem="/storage/emulated/0/Android/obb/com.dts.freefiremax/"
+        nome_arquivo="main.2019116013.com.dts.freefiremax.obb"
+        echo -e "${white}│  ${silver}📱  FF MAX                                         ${white}│${reset}"
+    else
+        return
+    fi
+    echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
+    echo ""
+    
+    # Verificar se a pasta de origem existe
+    if [ ! -d "$origem" ]; then
+        echo -e "$red [☠︎] Erro: Pasta não encontrada: $origem$reset"
+        echo ""
+        echo -e -n "${silver}Pressione ENTER para voltar${reset}"
+        read
+        return
+    fi
+    
+    # Verificar se o arquivo de destino existe
+    if [ ! -f "${destino}${nome_arquivo}" ]; then
+        echo -e "$red [☠︎] Erro: Arquivo não encontrado: ${destino}${nome_arquivo}$reset"
+        echo ""
+        echo -e -n "${silver}Pressione ENTER para voltar${reset}"
+        read
+        return
+    fi
+    
+    echo -e "${silver}[•] Verificando data da pasta de origem...${reset}"
+    
+    # Pegar data da pasta (última modificação)
+    if [ -d "$origem" ]; then
+        # No Termux, podemos usar stat para pegar a data
+        data_origem=$(stat -c %Y "$origem" 2>/dev/null || stat -f %m "$origem" 2>/dev/null)
+        
+        if [ -n "$data_origem" ]; then
+            echo -e "${silver}[•] Data da origem: $(date -d @$data_origem '+%d/%m/%Y %H:%M:%S')${reset}"
+            
+            # Aplicar mesma data ao arquivo de destino
+            touch -d @$data_origem "${destino}${nome_arquivo}" 2>/dev/null
+            
+            if [ $? -eq 0 ]; then
+                echo -e "${white}[⛥] Data sincronizada com sucesso!${reset}"
+                data_destino=$(stat -c %Y "${destino}${nome_arquivo}" 2>/dev/null || stat -f %m "${destino}${nome_arquivo}" 2>/dev/null)
+                echo -e "${white}    Nova data: $(date -d @$data_destino '+%d/%m/%Y %H:%M:%S')${reset}"
+            else
+                echo -e "$red [☠︎] Erro ao sincronizar data${reset}"
+            fi
+        else
+            echo -e "$red [☠︎] Erro ao obter data da pasta${reset}"
+        fi
+    else
+        echo -e "$red [☠︎] Erro: Pasta não encontrada${reset}"
+    fi
+    
+    echo ""
+    echo -e -n "${silver}Pressione ENTER para voltar${reset}"
+    read
 }
 
 # ===== BARRA DE PROGRESSO VERMELHA PISCANTE =====
@@ -76,11 +153,10 @@ progress_bar() {
         filled=$((progress/2))
         empty=$((50-filled))
         
-        # Efeito piscante: alterna entre vermelho brilhante e escuro
         if ((progress % 2 == 0)); then
-            color="\033[1;31m"  # Vermelho brilhante
+            color="\033[1;31m"
         else
-            color="\033[0;31m"  # Vermelho escuro
+            color="\033[0;31m"
         fi
         
         printf "\r${color}["
@@ -100,13 +176,11 @@ echo -e "${white}│  ${white}██║╚██╔╝██║██╔══�
 echo -e "${white}│  ${white}██║ ╚═╝ ██║███████╗██║ ╚████║╚██████╔╝    ${red}██║  ██║╚██████╔╝╚██████╗██║  ██║   ██║     ${white}│${reset}"
 echo -e "${white}│  ${white}╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝     ${red}╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝     ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────────┘${reset}"
-
 sleep 1
 
 # ========== CRÉDITOS ==========
 echo -e "${white}│  ${red}𓆩♱𓆪${white} SISTEMA DE BYPASS ${red}˙⋆✮${silver} // ${silver} 𓅃 DEVELOPED BY AUCEROLA NOCRY 𓅃 ${silver} // ${red}EQP NOCRY${red} ${red}𓆩♱𓆪${white}  │${reset}"
 echo ""
-
 sleep 2
 
 # ========== DESENHO DO HACKER PRINCIPAL ==========
@@ -135,10 +209,8 @@ echo -e "${red}⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⠟⠋⠀⠀⠀⠀⠀⠀⠀�
 echo -e "${red}⣿⣿⣿⣿⣿⡿⠿⠛⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⠀⠀⠀⢸⣿⣿⣷⠏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⠉⠛${reset}"
 echo -e "${red}⡿⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⢿⣿⣿⡄⠀⠀⢸⣿⣿⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
 echo -e "${red}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⠻⠇⠀⠀⠘⠛⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
-
 echo -e "$reset"
 echo ""
-
 sleep 2
 
 # ========== MENU PRINCIPAL ==========
@@ -147,7 +219,8 @@ echo -e "${white}│${white}                     MENU PRINCIPAL                 
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
 echo -e "${white}│  ${white}[1] INSTALAR OBBS                               ${white}│${reset}"
 echo -e "${white}│  ${silver}[2] ANT SCANNER                                 ${white}│${reset}"
-echo -e "${white}│  ${red}[3] SAIR                                          ${white}│${reset}"
+echo -e "${white}│  ${silver}[3] SINCRONIZAR DADOS                           ${white}│${reset}"
+echo -e "${white}│  ${red}[4] SAIR                                          ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
@@ -177,7 +250,6 @@ echo -e "${red}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀�
 echo -e "${red}⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀${reset}"
 echo -e "$reset"
 echo ""
-
 sleep 2
 
 # ========== SUBMENU INSTALAR OBBS ==========
@@ -186,7 +258,7 @@ echo -e "${white}│${silver}                   INSTALAR OBBS                   
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
 echo -e "${white}│  ${white}[1] FREE FIRE NORMAL                              ${white}│${reset}"
 echo -e "${white}│  ${silver}[2] FREE FIRE MAX                                ${white}│${reset}"
-echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
+echo -e "${white}│  ${red}[0] VOLTAR                                        ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
@@ -249,7 +321,7 @@ echo -e "$reset"
 echo ""
 
 echo ""
-echo -e "${white}[⛥] Download concluído! Pressione ENTER para voltar ao menu principal${reset}"
+echo -e "${white}[⛥] Download concluído! Pressione ENTER para voltar${reset}"
 read
 voltar_menu
 
@@ -309,7 +381,7 @@ echo -e "$reset"
 echo ""
 
 echo ""
-echo -e "${white}[⛥] Download concluído! Pressione ENTER para voltar ao menu principal${reset}"
+echo -e "${white}[•] Download concluído! Pressione ENTER para voltar${reset}"
 read
 voltar_menu
 
@@ -334,34 +406,4 @@ echo -e "${white}┌────────────────────
 echo -e "${white}│${silver}                   ANT SCANNER                       ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
 echo -e "${white}│  ${silver} 𓅃  EM BREVE..                                      ${white}│${reset}"
-echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
-echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
-echo ""
-
-echo -e -n "${white}NOCRY${silver} | ${red}SCANNER${reset}\n${red}└──╼ ${silver}"
-read scanner
-
-if [ "$scanner" = "0" ]; then
-    voltar_menu
-else
-    echo ""
-    echo -e "$red [☠︎] Opção inválida! Pressione ENTER para voltar${reset}"
-    read
-    voltar_menu
-fi
-
-elif [ "$menu" = "3" ]; then
-
-echo ""
-echo -e "$red [☠︎] Saindo do sistema...$reset"
-echo ""
-exit
-
-else
-
-echo ""
-echo -e "$red [☠︎] Opção inválida! Pressione ENTER para voltar${reset}"
-read
-voltar_menu
-
-fi
+ech
