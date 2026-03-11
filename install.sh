@@ -8,8 +8,6 @@ purple='\033[1;35m'
 yellow='\033[1;33m'
 reset='\033[0m'
 
-clear
-
 echo -e "$cyan"
 
 cat << "EOF"
