@@ -9,7 +9,7 @@ yellow='\033[1;33m'
 red='\033[1;31m'
 cyan='\033[1;36m'
 blue='\033[1;34m'
-silver='\033[0;37m'   # PRATA (cinza médio) - DIFERENTE do branco
+silver='\033[0;37m'   # PRATA (cinza médio)
 white='\033[1;37m'    # BRANCO (mais brilhante)
 reset='\033[0m'
 
@@ -50,7 +50,7 @@ progress_bar() {
     done
 }
 
-# ========== TÍTULO PRINCIPAL (COM BRANCO) ==========
+# ========== TÍTULO PRINCIPAL ==========
 echo -e "${white}┌─────────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│  ${white}███╗   ███╗███████╗███╗   ██╗██╗   ██╗    ${red}██████╗  ██████╗  ██████╗██████╗ ██╗   ██╗  ${white}│${reset}"
 echo -e "${white}│  ${white}████╗ ████║██╔════╝████╗  ██║██║   ██║    ${red}██╔══██╗██╔═══██╗██╔════╝██╔══██╗╚██╗ ██╔╝  ${white}│${reset}"
@@ -63,8 +63,8 @@ echo -e "${white}└────────────────────
 # PAUSA DE 1 SEGUNDO
 sleep 1
 
-# ========== CRÉDITOS (COM PRATA) ==========
-echo -e "${silver}│  ${red}⚡${white} SISTEMA DE BYPASS ${red}⚡${cyan} // ${purple}DEVELOPED BY AUCEROLA NOCRY${cyan} // ${red}EQP NOCRY${red} ⚡${silver}  │${reset}"
+# ========== CRÉDITOS (COM PRATA NO "DEVELOPED BY AUCEROLA NOCRY") ==========
+echo -e "${white}│  ${red}⚡${white} SISTEMA DE BYPASS ${red}⚡${silver} // ${silver}DEVELOPED BY AUCEROLA NOCRY${silver} // ${red}EQP NOCRY${red} ⚡${white}  │${reset}"
 echo ""
 
 # PAUSA DE 2 SEGUNDOS
@@ -103,12 +103,12 @@ echo ""
 # PAUSA DE 2 SEGUNDOS
 sleep 2
 
-# ========== MENU PRINCIPAL (COM PRATA NO [1]) ==========
+# ========== MENU PRINCIPAL (COM ANT SCANNER EM PRATA) ==========
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${white}                     MENU PRINCIPAL                    ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${white}│  ${silver}[1] INSTALAR OBBS                               ${white}│${reset}"  # AGORA É PRATA
-echo -e "${white}│  ${blue}[2] ANT SCANNER                                   ${white}│${reset}"
+echo -e "${white}│  ${silver}[1] INSTALAR OBBS                               ${white}│${reset}"
+echo -e "${white}│  ${silver}[2] ANT SCANNER                                 ${white}│${reset}"  # AGORA É PRATA
 echo -e "${white}│  ${red}[3] SAIR                                          ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
@@ -120,12 +120,12 @@ if [ "$menu" = "1" ]; then
 
 clear
 
-# ========== SUBMENU INSTALAR OBBS (COM PRATA) ==========
+# ========== SUBMENU INSTALAR OBBS ==========
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
-echo -e "${white}│${silver}                   INSTALAR OBBS                      ${white}│${reset}"  # TÍTULO EM PRATA
+echo -e "${white}│${silver}                   INSTALAR OBBS                      ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
 echo -e "${white}│  ${white}[1] FREE FIRE NORMAL                              ${white}│${reset}"
-echo -e "${white}│  ${silver}[2] FREE FIRE MAX                                ${white}│${reset}"  # OPÇÃO 2 EM PRATA
+echo -e "${white}│  ${silver}[2] FREE FIRE MAX                                ${white}│${reset}"
 echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
@@ -190,10 +190,28 @@ fi
 
 elif [ "$menu" = "2" ]; then
 
+clear
+
+# ========== SUBMENU ANT SCANNER (TUDO EM PRATA) ==========
+echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
+echo -e "${white}│${silver}                   ANT SCANNER                       ${white}│${reset}"
+echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
+echo -e "${white}│  ${silver}⚡  EM BREVE                                       ${white}│${reset}"
+echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
+echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
-echo -e "$blue ⚠️  ANT SCANNER EM BREVE ⚠️$reset"
-echo ""
-voltar_menu
+
+echo -e -n "${silver}┌─[NOCRY | SCANNER]${reset}\n${red}└──╼ "
+read scanner
+
+if [ "$scanner" = "0" ]; then
+    voltar_menu
+else
+    echo ""
+    echo -e "$red [✘] Opção inválida!$reset"
+    echo ""
+    voltar_menu
+fi
 
 elif [ "$menu" = "3" ]; then
 
