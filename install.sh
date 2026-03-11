@@ -17,7 +17,7 @@ reset='\033[0m'
 voltar_menu() {
     echo ""
     echo -e "${yellow}──────────────────────────────${reset}"
-    read -p "$(echo -e "${green}[•] Pressione ENTER para voltar ao menu principal${reset}")"
+    read -p "$(echo -e "${white}[•] Pressione ENTER para voltar ao menu principal${reset}")"  # BRANCO
     clear
     exec "$0"
     exit
@@ -34,13 +34,8 @@ progress_bar() {
         filled=$((progress/2))
         empty=$((50-filled))
         
-        if ((progress % 3 == 0)); then
-            color="\033[1;32m"  # Verde
-        elif ((progress % 3 == 1)); then
-            color="\033[1;36m"  # Ciano
-        else
-            color="\033[1;35m"  # Roxo
-        fi
+        # Todas as cores agora são VERMELHAS
+        color="\033[1;31m"  # Vermelho
         
         printf "\r${color}["
         printf "%0.s█" $(seq 1 $filled)
@@ -63,7 +58,7 @@ echo -e "${white}└────────────────────
 # PAUSA DE 1 SEGUNDO
 sleep 1
 
-# ========== CRÉDITOS (COM PRATA NO "DEVELOPED BY AUCEROLA NOCRY") ==========
+# ========== CRÉDITOS ==========
 echo -e "${white}│  ${red}⚡${white} SISTEMA DE BYPASS ${red}⚡${silver} // ${silver}DEVELOPED BY AUCEROLA NOCRY${silver} // ${red}EQP NOCRY${red} ⚡${white}  │${reset}"
 echo ""
 
@@ -103,12 +98,12 @@ echo ""
 # PAUSA DE 2 SEGUNDOS
 sleep 2
 
-# ========== MENU PRINCIPAL (COM ANT SCANNER EM PRATA) ==========
+# ========== MENU PRINCIPAL ==========
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${white}                     MENU PRINCIPAL                    ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
 echo -e "${white}│  ${silver}[1] INSTALAR OBBS                               ${white}│${reset}"
-echo -e "${white}│  ${silver}[2] ANT SCANNER                                 ${white}│${reset}"  # AGORA É PRATA
+echo -e "${white}│  ${silver}[2] ANT SCANNER                                 ${white}│${reset}"
 echo -e "${white}│  ${red}[3] SAIR                                          ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
@@ -136,7 +131,7 @@ read obb
 if [ "$obb" = "1" ]; then
 
 echo ""
-echo -e "$silver [•] Iniciando instalação...$reset"
+echo -e "$red [↓] Baixando OBB...$reset"  # VERMELHO
 echo ""
 
 # Instala o curl se não tiver
@@ -146,20 +141,17 @@ OBB_URL="https://github.com/aucerolanocry/ff-installer/releases/download/v1/main
 ARQUIVO="main.2019116013.com.dts.freefireth.obb"
 DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
 
-echo -e "$cyan [↓] Baixando OBB...$reset"
-echo ""
-
-# Download com a BARRA DO SCRIPT ANTIGO
+# Download com a BARRA DO SCRIPT ANTIGO (agora toda vermelha)
 curl -L -s -o "$ARQUIVO" "$OBB_URL" &
 pid=$!
 
 progress_bar
 wait $pid
 
-printf "\r\033[1;32m[██████████████████████████████████████████████████] 100%%\033[0m\n"
+printf "\r\033[1;31m[██████████████████████████████████████████████████] 100%%\033[0m\n"  # VERMELHO
 
 echo ""
-echo -e "$silver [✓] Download concluído!$reset"
+echo -e "$red [✓] Download concluído!$reset"  # VERMELHO
 echo ""
 
 # Move o arquivo silenciosamente
@@ -192,7 +184,7 @@ elif [ "$menu" = "2" ]; then
 
 clear
 
-# ========== SUBMENU ANT SCANNER (TUDO EM PRATA) ==========
+# ========== SUBMENU ANT SCANNER ==========
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${silver}                   ANT SCANNER                       ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
