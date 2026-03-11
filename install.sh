@@ -117,17 +117,18 @@ if [ "$menu" = "1" ]; then
 
 clear
 
-# ========== SUBMENU INSTALAR OBBS (CORRIGIDO) ==========
+# ========== SUBMENU INSTALAR OBBS ==========
 echo -e "${white}┌─────────────────────────────────────────────────────┐${reset}"
 echo -e "${white}│${pink}                   INSTALAR OBBS                      ${white}│${reset}"
 echo -e "${white}├─────────────────────────────────────────────────────┤${reset}"
-echo -e "${white}│  ${white}[1] FREE FIRE NORMAL                              ${white}│${reset}"  # AGORA É BRANCO
-echo -e "${white}│  ${pink}[2] FREE FIRE MAX                                ${white}│${reset}"  # AGORA É ROSA
-echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"  # AGORA É VERMELHO
+echo -e "${white}│  ${white}[1] FREE FIRE NORMAL                              ${white}│${reset}"
+echo -e "${white}│  ${pink}[2] FREE FIRE MAX                                ${white}│${reset}"
+echo -e "${white}│  ${red}[0] VOLTAR AO MENU                               ${white}│${reset}"
 echo -e "${white}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
-echo -e -n "${pink}┌─[NOCRY@OBBS]${reset}\n${pink}└──╼ "
+# PROMPT CORRIGIDO: [NOCRY | OBBS] em branco e └──╼ em vermelho
+echo -e -n "${white}┌─[NOCRY | OBBS]${reset}\n${red}└──╼ "
 read obb
 
 if [ "$obb" = "1" ]; then
