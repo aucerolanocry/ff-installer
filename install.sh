@@ -19,11 +19,8 @@ silver='\033[0;37m'   # PRATA (cinza médio)
 white='\033[1;37m'    # BRANCO (mais brilhante)
 reset='\033[0m'
 
-# FUNÇÃO PARA VOLTAR AO MENU
+# FUNÇÃO PARA VOLTAR AO MENU (CORRIGIDA)
 voltar_menu() {
-    echo ""
-    echo -e -n "${white}[•] Pressione ENTER para voltar ao menu principal${reset}"
-    read
     clear
     exec "$0"
     exit
@@ -220,8 +217,10 @@ echo -e "${red}⠀⠄⠠⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀�
 echo -e "$reset"
 echo ""
 
-# ========== VOLTAR ==========
+# ========== VOLTAR AO MENU PRINCIPAL ==========
 echo ""
+echo -e "${white}[•] Download concluído! Pressione ENTER para voltar ao menu principal${reset}"
+read
 voltar_menu
 
 elif [ "$obb" = "2" ]; then
@@ -282,8 +281,10 @@ echo -e "${red}⠀⠄⠠⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀�
 echo -e "$reset"
 echo ""
 
-# ========== VOLTAR ==========
+# ========== VOLTAR AO MENU PRINCIPAL ==========
 echo ""
+echo -e "${white}[•] Download concluído! Pressione ENTER para voltar ao menu principal${reset}"
+read
 voltar_menu
 
 elif [ "$obb" = "0" ]; then
@@ -293,8 +294,8 @@ voltar_menu
 else
 
 echo ""
-echo -e "$red [✘] Opção inválida!$reset"
-echo ""
+echo -e "$red [✘] Opção inválida! Pressione ENTER para voltar${reset}"
+read
 voltar_menu
 
 fi
@@ -320,8 +321,8 @@ if [ "$scanner" = "0" ]; then
     voltar_menu
 else
     echo ""
-    echo -e "$red [✘] Opção inválida!$reset"
-    echo ""
+    echo -e "$red [✘] Opção inválida! Pressione ENTER para voltar${reset}"
+    read
     voltar_menu
 fi
 
@@ -335,8 +336,8 @@ exit
 else
 
 echo ""
-echo -e "$red [✘] Opção inválida!$reset"
-echo ""
+echo -e "$red [✘] Opção inválida! Pressione ENTER para voltar${reset}"
+read
 voltar_menu
 
 fi
