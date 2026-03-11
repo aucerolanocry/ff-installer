@@ -22,7 +22,7 @@ if [ ! -d "/storage/emulated/0" ]; then
     echo -e "\033[1;37m│\033[1;31m                     ⚠︎  ERRO  ⚠︎                        \033[1;37m│\033[0m"
     echo -e "\033[1;37m├─────────────────────────────────────────────────────────┤\033[0m"
     echo -e "\033[1;37m│                                                         │\033[0m"
-    echo -e "\033[1;37m│  \033[1;31m𓏵  PERMISSÃO NEGADA!                                \033[1;37m│\033[0m"
+    echo -e "\033[1;37m│  \033[1;31m  ☠︎  PERMISSÃO NEGADA!                                \033[1;37m│\033[0m"
     echo -e "\033[1;37m│                                                         │\033[0m"
     echo -e "\033[1;37m│  \033[0;37mPara usar este script, você precisa permitir       \033[1;37m│\033[0m"
     echo -e "\033[1;37m│  \033[0;37mo acesso do Termux aos arquivos do dispositivo.    \033[1;37m│\033[0m"
@@ -309,7 +309,7 @@ echo -e "$reset"
 echo ""
 
 echo ""
-echo -e "${white}[•] Download concluído! Pressione ENTER para voltar ao menu principal${reset}"
+echo -e "${white}[⛥] Download concluído! Pressione ENTER para voltar ao menu principal${reset}"
 read
 voltar_menu
 
@@ -320,7 +320,7 @@ voltar_menu
 else
 
 echo ""
-echo -e "$red [𓏵] Opção inválida! Pressione ENTER para voltar${reset}"
+echo -e "$red [☠︎] Opção inválida! Pressione ENTER para voltar${reset}"
 read
 voltar_menu
 
@@ -345,7 +345,7 @@ if [ "$scanner" = "0" ]; then
     voltar_menu
 else
     echo ""
-    echo -e "$red [𓏵] Opção inválida! Pressione ENTER para voltar${reset}"
+    echo -e "$red [☠︎] Opção inválida! Pressione ENTER para voltar${reset}"
     read
     voltar_menu
 fi
@@ -353,14 +353,14 @@ fi
 elif [ "$menu" = "3" ]; then
 
 echo ""
-echo -e "$red [𓏵] Saindo do sistema...$reset"
+echo -e "$red [☠︎] Saindo do sistema...$reset"
 echo ""
 exit
 
 else
 
 echo ""
-echo -e "$red [𓏵] Opção inválida! Pressione ENTER para voltar${reset}"
+echo -e "$red [☠︎] Opção inválida! Pressione ENTER para voltar${reset}"
 read
 voltar_menu
 
