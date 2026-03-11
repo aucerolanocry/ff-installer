@@ -23,24 +23,18 @@ voltar_menu() {
     exit
 }
 
-# FUNÇÃO DA BARRA DE PROGRESSO COLORIDA
+# FUNÇÃO DA BARRA DE PROGRESSO COLORIDA PISCANTE
 progress_bar() {
+    local -a cores=($green $cyan $purple $red $yellow)
+    local cor_index=0
+    
     while read -r line; do
         if [[ $line =~ [0-9]+% ]]; then
             percent=${BASH_REMATCH[0]%\%}
             
-            # Escolhe a cor baseada na porcentagem
-            if [ $percent -lt 20 ]; then
-                color=$green
-            elif [ $percent -lt 40 ]; then
-                color=$cyan
-            elif [ $percent -lt 60 ]; then
-                color=$purple
-            elif [ $percent -lt 80 ]; then
-                color=$red
-            else
-                color=$yellow
-            fi
+            # Alterna as cores a cada atualização (efeito piscante)
+            cor_index=$(( (cor_index + 1) % 5 ))
+            color=${cores[$cor_index]}
             
             # Desenha a barra
             filled=$((percent/2))
@@ -149,7 +143,7 @@ DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
 echo -e "$cyan [↓] Baixando OBB...$reset"
 echo ""
 
-# Download com barra de progresso COLORIDA
+# Download com barra de progresso COLORIDA PISCANTE
 curl -L -o "$ARQUIVO" "$OBB_URL" --progress-bar 2>&1 | progress_bar
 
 echo ""
