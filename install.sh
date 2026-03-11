@@ -9,8 +9,9 @@ yellow='\033[1;33m'
 red='\033[1;31m'
 cyan='\033[1;36m'
 blue='\033[1;34m'
-pink='\033[1;35m'  # Rosa
+pink='\033[1;35m'
 white='\033[1;37m'
+magenta='\033[1;35m'
 reset='\033[0m'
 
 # FUNÇÃO PARA VOLTAR AO MENU (CORRIGIDA)
@@ -23,27 +24,30 @@ voltar_menu() {
     exit
 }
 
-# FUNÇÃO DA BARRA DE PROGRESSO PISCANTE
-progress_bar() {
-    local -a cores=($green $cyan $purple $red $yellow)
+# ========== BARRA DE PROGRESSO COLORIDA PISCANTE ==========
+progress_bar_colorido() {
+    local -a cores=($red $yellow $green $cyan $blue $purple $magenta)
     local cor_index=0
     
-    while read -r line; do
-        if [[ $line =~ [0-9]+% ]]; then
-            percent=${BASH_REMATCH[0]%\%}
-            
-            # Alterna as cores a cada atualização
-            cor_index=$(( (cor_index + 1) % 5 ))
-            color=${cores[$cor_index]}
-            
-            # Desenha a barra
-            barra=""
-            for ((i=0; i<percent/2; i++)); do barra+="█"; done
-            for ((i=0; i<50-percent/2; i++)); do barra+="░"; done
-            
-            printf "\r${color}[%s] %3d%%${reset}" "$barra" "$percent"
-        fi
+    for ((i=0; i<=100; i+=5)); do
+        # Alterna as cores
+        cor_index=$(( (cor_index + 1) % 7 ))
+        color=${cores[$cor_index]}
+        
+        # Desenha a barra com █ preenchido e ░ vazio
+        barra=""
+        for ((j=0; j<i; j+=5)); do barra+="█"; done
+        for ((j=i; j<100; j+=5)); do barra+="░"; done
+        
+        # Mostra a barra piscante
+        printf "\r${color}[${white}%s${color}] ${white}%3d%%${reset}" "$barra" "$i"
+        sleep 0.2
     done
+    
+    # Final em verde
+    barra=""
+    for ((i=0; i<20; i++)); do barra+="█"; done
+    printf "\r${green}[${white}%s${green}] ${white}100%%${reset}\n" "$barra"
 }
 
 # ========== TÍTULO PRINCIPAL (SOZINHO) ==========
@@ -56,7 +60,7 @@ echo -e "${green}│  ${white}██║ ╚═╝ ██║███████
 echo -e "${green}│  ${white}╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝ ╚═════╝     ${red}╚═╝  ╚═╝ ╚═════╝  ╚═════╝╚═╝  ╚═╝   ╚═╝     ${green}│${reset}"
 echo -e "${green}└─────────────────────────────────────────────────────────┘${reset}"
 
-# PAUSA DE 1 SEGUNDO (ALTERADO DE 1.5 PARA 1)
+# PAUSA DE 1 SEGUNDO
 sleep 1
 
 # ========== CRÉDITOS ==========
@@ -83,7 +87,7 @@ cat << "EOF"
 ⣿⣿⣿⣿⣿⣽⣿⣿⣿⣿⣿⣿⣿⠁⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣷⣦⣤⣾⣿⣿⣿⡿⠃⣠⣴⣿⣿⣿⣿⡿⠃⠀⠀⠀⠀⠀⠀⠀⠀⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣻⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠈⠉⠁⠀⠀⠈⠉⠻⣿⣿⣿⣿⣇⣼⠟⠋⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⣀⡀⠀⠀⠀⠀⠀⢀⣿⣿⣿⣿⣿⣿⣄⣀⠀⠀⠀⣀⣠⣴⣶⡄⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿
-⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⣾⣿⣿⣷⣶⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿
+⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⣾⣿⣿⣷⣶⣶⣶⣾⣿⣿⣿⣿⣿⣿⣿⣿��⣿⣿⣿⣿⣿⣿⣿⠇⠀⠀⠀⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡆⠀⠀⠀⠀⠀⠹⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠋⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣇⠀⠀⠀⠀⠀⠀⠘⠻⠿⠿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣛⡛⠛⠛⠋⠁⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿
 ⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⢶⣾⣿⣿⣏⠛⠿⣿⣿⡿⠋⢉⣿⣿⣿⣿⠀⠀⢰⡇⠀⠀⠀⠀⠀⠀⠀⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿
@@ -147,17 +151,19 @@ DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
 echo -e "$cyan [↓] Baixando OBB...$reset"
 echo ""
 
-# Download com barra de progresso PISCANTE
-curl -L -o "$ARQUIVO" "$OBB_URL" --progress-bar 2>&1 | progress_bar
+# Download com barra de progresso COLORIDA
+curl -L -o "$ARQUIVO" "$OBB_URL" --progress-bar 2>&1 > /dev/null &
+progress_bar_colorido
 
-echo ""
 echo ""
 echo -e "$pink [✓] Download concluído!$reset"
 echo ""
 
 # Move o arquivo silenciosamente
+mkdir -p "$DESTINO" 2>/dev/null
 mv "$ARQUIVO" "$DESTINO" 2>/dev/null
 
+echo -e "$green [✓] Arquivo movido para: $DESTINO$reset"
 echo ""
 voltar_menu
 
