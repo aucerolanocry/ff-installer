@@ -19,7 +19,7 @@ voltar_menu() {
     echo -e "${yellow}──────────────────────────────${reset}"
     read -p "$(echo -e "${green}[•] Pressione ENTER para voltar ao menu principal${reset}")"
     clear
-    bash "$0"
+    exec "$0"
     exit
 }
 
@@ -112,7 +112,9 @@ echo -e "${cyan}│  ${red}[3] SAIR                                          ${c
 echo -e "${cyan}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
-read -p "$(echo -e "${green}┌─[${red}NOCRY${green}@${cyan}TERMUX${green}]${reset}\n${green}└──╼ ${yellow}$ ")" menu
+# CORREÇÃO: Usar echo antes do read para garantir as cores
+echo -e -n "${green}┌─[${red}NOCRY${green}@${cyan}TERMUX${green}]${reset}\n${green}└──╼ ${yellow}"
+read menu
 
 if [ "$menu" = "1" ]; then
 
@@ -127,7 +129,9 @@ echo -e "${cyan}│  ${yellow}[0] VOLTAR AO MENU                               $
 echo -e "${cyan}└─────────────────────────────────────────────────────┘${reset}"
 echo ""
 
-read -p "$(echo -e "${pink}┌─[NOCRY@OBBS]${reset}\n${pink}└──╼ $ ")" obb
+# CORREÇÃO: Usar echo antes do read
+echo -e -n "${pink}┌─[NOCRY@OBBS]${reset}\n${pink}└──╼ "
+read obb
 
 if [ "$obb" = "1" ]; then
 
