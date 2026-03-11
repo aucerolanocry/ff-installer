@@ -16,32 +16,31 @@ reset='\033[0m'
 # FUNÇÃO PARA VOLTAR AO MENU
 voltar_menu() {
     echo ""
-    echo -e "${yellow}──────────────────────────────${reset}"
-    read -p "$(echo -e "${white}[•] Pressione ENTER para voltar ao menu principal${reset}")"  # BRANCO
+    echo -e "${red}──────────────────────────────${reset}"  # VERMELHO
+    read -p "$(echo -e "${white}[•] Pressione ENTER para voltar ao menu principal${reset}")"
     clear
     exec "$0"
     exit
 }
 
-# ===== BARRA DE PROGRESSO DO SCRIPT ANTIGO =====
+# ===== BARRA DE PROGRESSO PISCANTE (CINZA, BRANCO, VERMELHO) =====
 progress_bar() {
-    progress=0
-    while kill -0 $pid 2>/dev/null; do
-        progress=$((progress+1))
-        if [ $progress -gt 100 ]; then
-            progress=100
+    local -a cores=($silver $white $red)
+    local cor_index=0
+    
+    while read -r line; do
+        if [[ $line =~ [0-9]+% ]]; then
+            percent=${BASH_REMATCH[0]%\%}
+            
+            cor_index=$(( (cor_index + 1) % 3 ))
+            color=${cores[$cor_index]}
+            
+            barra=""
+            for ((i=0; i<percent/2; i++)); do barra+="█"; done
+            for ((i=0; i<50-percent/2; i++)); do barra+="░"; done
+            
+            printf "\r${color}[%s] %3d%%${reset}" "$barra" "$percent"
         fi
-        filled=$((progress/2))
-        empty=$((50-filled))
-        
-        # Todas as cores agora são VERMELHAS
-        color="\033[1;31m"  # Vermelho
-        
-        printf "\r${color}["
-        printf "%0.s█" $(seq 1 $filled)
-        printf "%0.s░" $(seq 1 $empty)
-        printf "] %3d%%\033[0m" "$progress"
-        sleep 0.1
     done
 }
 
@@ -131,7 +130,7 @@ read obb
 if [ "$obb" = "1" ]; then
 
 echo ""
-echo -e "$red [↓] Baixando OBB...$reset"  # VERMELHO
+echo -e "$red [↓] Baixando OBB...$reset"
 echo ""
 
 # Instala o curl se não tiver
@@ -141,17 +140,12 @@ OBB_URL="https://github.com/aucerolanocry/ff-installer/releases/download/v1/main
 ARQUIVO="main.2019116013.com.dts.freefireth.obb"
 DESTINO="/storage/emulated/0/MIUI/sound_recorder/fm_rec/"
 
-# Download com a BARRA DO SCRIPT ANTIGO (agora toda vermelha)
-curl -L -s -o "$ARQUIVO" "$OBB_URL" &
-pid=$!
-
-progress_bar
-wait $pid
-
-printf "\r\033[1;31m[██████████████████████████████████████████████████] 100%%\033[0m\n"  # VERMELHO
+# Download com barra PISCANTE (cinza, branco, vermelho)
+curl -L -o "$ARQUIVO" "$OBB_URL" --progress-bar 2>&1 | progress_bar
 
 echo ""
-echo -e "$red [✓] Download concluído!$reset"  # VERMELHO
+echo ""
+echo -e "$silver [✓] Download concluído!$reset"  # CINZA
 echo ""
 
 # Move o arquivo silenciosamente
