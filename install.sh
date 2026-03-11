@@ -318,7 +318,7 @@ mostrar_tela_principal() {
     echo ""
 
     # CRÉDITOS
-    echo -e "${white}│  ${red}𓆩♱𓆪${white} SISTEMA DE BYPASS ${red}˙⋆✮${silver} // ${silver} 𓅃 DEVELOPED BY AUCEROLA NOCRY 𓅃 ${silver} // ${red}EQP NOCRY${red} ${red}𓆩♱𓆪${white}  │${reset}"
+    echo -e "${white}│  ${red}𓆩♱𓆪${white} SISTEMA DE BYPASS ${red} ${silver} // ${silver} 𓅃 CREATED BY AUCEROLA NOCRY 𓅃 ${silver} // ${red}#EQPNOCRY${red} ${red}𓆩♱𓆪${white}  │${reset}"
     echo ""
     sleep 0.5
 
